@@ -44,27 +44,23 @@
     $categories      = get_the_category();
     $tag_displays    = '';
 
-    foreach ($categories as $category)
+    if ($categories)
     {
-      $tag_displays .= "\n".'    <tag>'.htmlspecialchars($category->cat_name).'</tag>';
-    }
-
-    if (function_exists('utw_show_tags_for_current_post'))
-    {
-      $tags = $utw->getTagsForPost($id);
-      foreach ($tags as $tag)
+      foreach ($categories as $category)
       {
-        $tag           = $utw->formatTag($tag, '%tag_display%');
-        $tag_displays .= "\n".'    <tag>'.htmlspecialchars($tag).'</tag>';
+        $tag_displays .= "\n".'    <tag>'.htmlspecialchars($category->cat_name).'</tag>';
       }
     }
-    elseif (function_exists('UTW_ShowTagsForCurrentPost'))
+
+    if (function_exists('get_the_tags'))
     {
-      $tags = $utw->GetTagsForPost($id);
-      foreach ($tags as $tag)
+      $tags = get_the_tags();
+      if ($tags)
       {
-        $tag           = $utw->FormatTag($tag, '%tagdisplay%');
-        $tag_displays .= "\n".'    <tag>'.htmlspecialchars($tag).'</tag>';
+        foreach ($tags as $tag)
+        {
+          $tag_displays .= "\n".'    <tag>'.htmlspecialchars($tag->name).'</tag>';
+        }
       }
     }
 
@@ -94,6 +90,7 @@
     <comments><?php echo $comments; ?></comments>
     <trackbacks><?php echo $trackbacks; ?></trackbacks>
     <written><?php echo mysql2date('D, d M Y H:i:s +0000', get_post_time('Y-m-d H:i:s', TRUE), FALSE); ?></written>
+    <?php if ($attachments) : ?>
     <?php foreach ($attachments as $attachment) : ?>
     <?php $file = get_post_meta($attachment->ID, '_wp_attached_file', true); ?>
     <attachment>
@@ -103,6 +100,7 @@
       <url><?php echo $attachment->guid; ?></url>
     </attachment>
     <?php endforeach; ?>
+    <?php endif; ?>
   </entry>
 <?
   endif;

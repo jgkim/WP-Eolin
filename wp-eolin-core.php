@@ -121,31 +121,23 @@
       $params['written']   = mysql2date('D, d M Y H:i:s +0000', get_post_time('Y-m-d H:i:s', TRUE), FALSE);
 
       $categories = get_the_category();
-      foreach ($categories as $category)
+      if ($categories)
       {
-        array_push($params['tags'], htmlspecialchars($category->cat_name));
-      }
-
-      if (function_exists('utw_show_tags_for_current_post'))
-      {
-        global $utw;
-
-        $tags = $utw->getTagsForPost($id);
-        foreach ($tags as $tag)
+        foreach ($categories as $category)
         {
-          $tag = $utw->formatTag($tag, '%tag_display%');
-          array_push($params['tags'], htmlspecialchars($tag));
+          array_push($params['tags'], htmlspecialchars($category->cat_name));
         }
       }
-      elseif (function_exists('UTW_ShowTagsForCurrentPost'))
-      {
-        global $utw;
 
-        $tags = $utw->GetTagsForPost($id);
-        foreach ($tags as $tag)
+      if (function_exists('get_the_tags'))
+      {
+        $tags = get_the_tags();
+        if ($tags)
         {
-          $tag = $utw->FormatTag($tag, '%tagdisplay%');
-          array_push($params['tags'], htmlspecialchars($tag));
+          foreach ($tags as $tag)
+          {
+            array_push($params['tags'], htmlspecialchars($tag->name));
+          }
         }
       }
     }
