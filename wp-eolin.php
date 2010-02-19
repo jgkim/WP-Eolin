@@ -2,8 +2,8 @@
   /*
    * Plugin Name: WP-Eolin
    * Plugin URI: http://jayg.org/projects/wp-eolin/
-   * Description: With this plugin you can syndicate entry with Eolin.
-   * Version: 0.12.0
+   * Description: With this plugin you can syndicate posts to Eolin.
+   * Version: 0.13.0
    * Author: James G. Kim
    * Author URI: http://jayg.org/
    */
