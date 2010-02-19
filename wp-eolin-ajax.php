@@ -1,7 +1,7 @@
 <?php
   /* Please see wp-eolin.php for more information. */
 
-  require_once('../../../wp-config.php');
+  require_once('../../../wp-load.php');
   require_once('wp-eolin-core.php');
 
   $error   = EOLIN_ERROR_PARAMETER;

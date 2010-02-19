@@ -3,7 +3,7 @@
    * Plugin Name: WP-Eolin
    * Plugin URI: http://jayg.org/projects/wp-eolin/
    * Description: With this plugin you can syndicate posts to Eolin.
-   * Version: 0.13.0
+   * Version: 0.13.1
    * Author: James G. Kim
    * Author URI: http://jayg.org/
    */
@@ -159,7 +159,7 @@
 
   function eolin_admin_footer()
   {
-    global $id, $post, $wp_version;
+    global $id, $post;
 
     if (!isset($id))   $id   = $_REQUEST['post'];
     if (!isset($post)) $post = get_post($id);
@@ -169,7 +169,7 @@
 ?>
       <script type="text/javascript">
       //<![CDATA[
-        var images = document.getElementById('<?php echo ($wp_version < 2.1) ? 'the-list-x' : 'the-list'; ?>').getElementsByTagName('*');
+        var images = document.getElementById('posts-filter').getElementsByTagName('*');
         var regex  = new RegExp('\\beolin\\b');
 
         for (i = 0; i < images.length; i++)

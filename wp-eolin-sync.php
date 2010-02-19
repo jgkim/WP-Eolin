@@ -1,5 +1,5 @@
 <?php
-  require_once('../../../wp-config.php');
+  require_once('../../../wp-load.php');
 
   header('Content-type: text/xml');
   echo '<?xml version="1.0" encoding="'.get_option('blog_charset').'"?>'."\n";
