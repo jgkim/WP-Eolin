@@ -3,7 +3,7 @@
    * Plugin Name: WP-Eolin
    * Plugin URI: http://jayg.org/projects/wp-eolin/
    * Description: With this plugin you can syndicate posts to Eolin.
-   * Version: 0.13.1
+   * Version: 0.13.2
    * Author: James G. Kim
    * Author URI: http://jayg.org/
    */
@@ -57,8 +57,35 @@
     }
   }
 
+  function eolin_inner_custom_box()
+  {
+    global $id, $post;
+
+    if (!isset($id))   $id   = $_REQUEST['post'];
+    if (!isset($post)) $post = get_post($id);
+
+    $checked = '';
+    if ((empty($id) and EOLIN_DEFAULT) or
+        (!empty($id) and EOLIN_DEFAULT and ('draft' == $post->post_status)) or
+        (!empty($id) and ('' != get_post_meta($id, EOLIN_META_NAME, TRUE))))
+    {
+      $checked = 'checked="checked" ';
+    }
+    ?>
+      <label class="selectit">
+        <input type="checkbox" name="<?php echo EOLIN_META_NAME; ?>" value="true" <?php echo $checked; ?>/>
+        <?php _e('Syndicate with Eolin', 'eolin'); ?>
+      </label>
+    <?php
+  }
+
   function eolin_admin_head()
   {
+    global $id, $post;
+
+    if (!isset($id))   $id   = $_REQUEST['post'];
+    if (!isset($post)) $post = get_post($id);
+
     if (preg_match('/(edit\.php)/i', $_SERVER['SCRIPT_NAME']))
     {
 ?>
@@ -155,6 +182,12 @@
       </script>
 <?php
     }
+
+    if (preg_match('/(post\.php|post-new\.php)/i', $_SERVER['SCRIPT_NAME']) and ('static' != $post->post_status))
+    {
+      add_meta_box('eolin-box', 'Eolin', 'eolin_inner_custom_box', 'post', 'side' );
+      
+    }
   }
 
   function eolin_admin_footer()
@@ -187,36 +220,6 @@
             }
           }
         }
-      //]]>
-      </script>
-<?php
-    }
-
-    if (preg_match('/(post\.php|post-new\.php)/i', $_SERVER['SCRIPT_NAME']) and ('static' != $post->post_status))
-    {
-      $checked = '';
-      if ((empty($id) and EOLIN_DEFAULT) or
-          (!empty($id) and EOLIN_DEFAULT and ('draft' == $post->post_status)) or
-          (!empty($id) and ('' != get_post_meta($id, EOLIN_META_NAME, TRUE))))
-      {
-        $checked = 'checked="checked" ';
-      }
-?>
-      <fieldset id="eolin-box" class="dbx-box">
-        <h3 class="dbx-handle">Eolin</h3>
-        <div class="dbx-content">
-          <label class="selectit">
-            <input type="checkbox" name="<?php echo EOLIN_META_NAME; ?>" value="true" <?php echo $checked; ?>/>
-            <?php _e('Syndicate with Eolin', 'eolin'); ?>
-          </label>
-        </div>
-      </fieldset>
-      <script type="text/javascript">
-      //<![CDATA[
-        var eolin_grabit   = document.getElementById('grabit');
-        var eolin_dbx_box  = document.getElementById('eolin-box');
-
-        if (eolin_grabit) eolin_grabit.appendChild(eolin_dbx_box);
       //]]>
       </script>
 <?php
